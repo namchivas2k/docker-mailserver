@@ -66,16 +66,12 @@ RUN --mount=type=cache,target=/root/.composer \
     ${RC_PLUGINS}; \
     fi
 
-ARG ADMIN_VER=5.4.6 # renovate: depName=jeboehm/mailserver-admin
+
+COPY ./web-admin /opt/manager
+
+ARG renovate: depName=jeboehm/mailserver-admin
 RUN --mount=type=cache,target=/root/.composer \
-    mkdir /opt/manager && \
     cd /opt/manager && \
-    curl -sSLf \
-    -o /tmp/admin.tar.gz \
-    https://github.com/namchivas2k/mailserver-admin/archive/${ADMIN_VER}.tar.gz && \
-    tar -xf /tmp/admin.tar.gz -C /tmp && \
-    mv /tmp/mailserver-admin-${ADMIN_VER}/.??* /tmp/mailserver-admin-${ADMIN_VER}/* /opt/manager/ && \
-    rm /tmp/admin.tar.gz && \
     mkdir -p \
     var/cache/ \
     var/log/ && \
@@ -85,6 +81,29 @@ RUN --mount=type=cache,target=/root/.composer \
     var/cache/prod/ \
     var/log/ && \
     ln -s /opt/manager/public /var/www/html/manager
+
+
+
+# ARG ADMIN_VER=5.4.6 # renovate: depName=jeboehm/mailserver-admin
+# RUN --mount=type=cache,target=/root/.composer \
+#     mkdir /opt/manager && \
+#     cd /opt/manager && \
+#     curl -sSLf \
+#     -o /tmp/admin.tar.gz \
+#     https://github.com/namchivas2k/mailserver-admin/archive/${ADMIN_VER}.tar.gz && \
+#     tar -xf /tmp/admin.tar.gz -C /tmp && \
+#     mv /tmp/mailserver-admin-${ADMIN_VER}/.??* /tmp/mailserver-admin-${ADMIN_VER}/* /opt/manager/ && \
+#     rm /tmp/admin.tar.gz && \
+#     mkdir -p \
+#     var/cache/ \
+#     var/log/ && \
+#     DATABASE_URL="${DATABASE_URL}?serverVersion=8.0" composer install --no-dev --prefer-dist -o --apcu-autoloader && \
+#     composer symfony:dump-env prod && \
+#     chown -R www-data:www-data \
+#     var/cache/prod/ \
+#     var/log/ && \
+#     ln -s /opt/manager/public /var/www/html/manager
+
 
 COPY --from=ghcr.io/jeboehm/dockerize:0.9.3 /bin/dockerize /usr/local/bin/dockerize
 COPY rootfs/ /

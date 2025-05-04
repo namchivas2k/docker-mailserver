@@ -1,0 +1,12 @@
+{% extends '@!EasyAdmin/page/login.html.twig' %}
+
+{% block login_form_wrapper %}
+    {{ parent() }}
+    {% if enable_oauth %}
+        <a role="button" href="{{ path('hwi_oauth_service_redirect', { service: "default" }) }}" class="mt-2 btn btn-secondary btn-lg">
+            {{ oauth_button_text }}
+        </a>
+    {% endif %}
+
+    {% include 'admin/_includes/login_footer.html.twig' %}
+{% endblock %}

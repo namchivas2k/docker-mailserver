@@ -1,0 +1,74 @@
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
+
+{% block main %}
+    {{ parent() }}
+
+    {% if entity.instance.dkimStatus.dkimEnabled and (not entity.instance.dkimStatus.dkimRecordFound or not entity.instance.dkimStatus.dkimRecordValid) %}
+        {% set alert_context = 'danger' %}
+        {% set alert_text %}
+            DKIM is enabled but not correctly configured. This may result in your emails being rejected by recipients. Please verify your DNS settings.
+        {% endset %}
+    {% endif %}
+
+    {% if not entity.instance.dkimStatus.dkimEnabled %}
+        {% set alert_context = 'info' %}
+        {% set alert_text %}
+            {% if entity.instance.dkimStatus.dkimRecordFound and entity.instance.dkimStatus.dkimRecordValid %}
+                DKIM is correctly configured and ready to be enabled.
+            {% else %}
+                DKIM is disabled.
+            {% endif %}
+        {% endset %}
+    {% endif %}
+
+    {% if entity.instance.dkimStatus.dkimEnabled and entity.instance.dkimStatus.dkimRecordFound and entity.instance.dkimStatus.dkimRecordValid %}
+        {% set alert_context = 'success' %}
+        {% set alert_text %}
+            DKIM is configured correctly and functioning as expected.
+        {% endset %}
+    {% endif %}
+
+    {% if alert_text is not empty %}
+        <div class="alert alert-{{ alert_context }}" role="alert">
+            {{ alert_text }}
+        </div>
+    {% endif %}
+
+    {% if entity.instance.dkimSelector and entity.instance.dkimPrivateKey %}
+        <section class="content-footer">
+            <div class="row">
+                <div class="col-2">
+                    Domain:
+                </div>
+                <div class="col-10">
+                    {{ entity.instance.dkimSelector }}._domainkey.{{ entity.instance.name }}
+                </div>
+
+                <div class="col-2">
+                    Record type:
+                </div>
+                <div class="col-10">
+                    TXT
+                </div>
+
+                <div class="col-2">
+                    Expected value:
+                </div>
+                <div class="col-10">
+                    <div style="white-space: pre-wrap; word-wrap: anywhere; font-family: monospace">
+                        {{- entity.instance.expectedDnsRecord }}
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    Current value:
+                </div>
+                <div class="col-10">
+                    <div style="white-space: pre-wrap; word-wrap: anywhere; font-family: monospace">
+                        {{- entity.instance.currentDnsRecord }}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

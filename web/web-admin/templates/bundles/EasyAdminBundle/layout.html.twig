@@ -1,0 +1,49 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block content_footer_wrapper %}
+    <section class="content-footer">
+        <footer class="text-center">
+            <small class="text-muted">
+                {# <a href="https://github.com/jeboehm/docker-mailserver">docker-mailserver</a> #}
+                Re-make by <a href="https://github.com/namchivas2k" target="_blank">NamChivas</a>
+            </small>
+        </footer>
+    </section>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        //User
+        if (location.pathname.startsWith("/user")) {
+            try {
+            document
+                .getElementById("main")
+                ?.querySelectorAll("tbody tr")
+                ?.forEach((row) => {
+                const isAdmin = row.querySelector(`td[data-column="admin"] input`)?.checked || false;
+                if (isAdmin) {
+                    row.querySelector("td .dropdown-overlay .action-delete")?.remove();
+                    row.querySelector("td.batch-actions-selector .form-check input")?.remove();
+                }
+                });
+            } catch (error) {}
+        }
+
+        if (location.pathname.startsWith("/domain")) {
+            try {
+            //Domain
+            document
+                .getElementById("main")
+                ?.querySelectorAll("tbody tr")
+                ?.forEach((row) => {
+                const useCount = parseInt(row.querySelector(`td[data-column="users"]`)?.innerText || "0");
+                if (useCount > 0) {
+                    row.querySelector("td .dropdown-overlay .action-delete")?.remove();
+                    row.querySelector("td.batch-actions-selector .form-check input")?.remove();
+                }
+                });
+            } catch (error) {}
+        }
+        });
+    </script>
+{% endblock %}

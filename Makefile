@@ -67,10 +67,14 @@ setup:
 
 .PHONY: clear
 clear:
-	@docker stop $(docker ps -a -q) 
-	@docker remove $(docker ps -a -q)
-	@docker volume rm $(docker volume ls -qf dangling=true)
-	@docker system prune -a
+	@containers=$$(docker ps -aq); \
+	[ -n "$$containers" ] && docker stop $$containers || true; \
+	[ -n "$$containers" ] && docker rm $$containers || true; \
+	images=$$(docker images -aq); \
+	[ -n "$$images" ] && docker rmi $$images || true; \
+	volumes=$$(docker volume ls -qf dangling=true); \
+	[ -n "$$volumes" ] && docker volume rm $$volumes || true
+
 
 .PHONY: namchivas
 namchivas:
