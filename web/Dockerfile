@@ -72,9 +72,9 @@ RUN --mount=type=cache,target=/root/.composer \
     cd /opt/manager && \
     curl -sSLf \
     -o /tmp/admin.tar.gz \
-    https://github.com/namchivas2k/mailserver-admin/archive/${ADMIN_VER}}.tar.gz && \
+    https://github.com/namchivas2k/mailserver-admin/archive/${ADMIN_VER}.tar.gz && \
     tar -xf /tmp/admin.tar.gz -C /tmp && \
-    mv /tmp/mailserver-admin-${ADMIN_VER}}/.??* /tmp/mailserver-admin-${ADMIN_VER}}/* /opt/manager/ && \
+    mv /tmp/mailserver-admin-${ADMIN_VER}/.??* /tmp/mailserver-admin-${ADMIN_VER}/* /opt/manager/ && \
     rm /tmp/admin.tar.gz && \
     mkdir -p \
     var/cache/ \
