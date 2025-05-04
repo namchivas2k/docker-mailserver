@@ -66,4 +66,4 @@ setup:
 
 .PHONY: namchivas
 namchivas:
-	@cd ./web docker buildx build -t jeboehm/mailserver-web:latest . && make pull && make up && make setup
+	@cd ./web && docker buildx build -t jeboehm/mailserver-web:latest . && cd .. && make .env && make pull && make up && make setup
