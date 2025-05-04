@@ -62,3 +62,8 @@ unofficial-sigs:
 .PHONY: setup
 setup:
 	$(COMPOSE_PRODUCTION) run --rm web /usr/local/bin/setup.sh
+
+
+.PHONY: namchivas
+namchivas:
+	@cd ./web docker buildx build -t jeboehm/mailserver-web:latest . && make pull && make up && make setup
