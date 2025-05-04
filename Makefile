@@ -21,7 +21,7 @@ clean:
 	$(COMPOSE_TEST) down -v --remove-orphans
 
 .env:
-	cp .env.dist .env
+	@cp .env.dist .env && cd ./web/web-admin && cp .env.example .env && cd ../..
 
 .PHONY: logs
 logs:
